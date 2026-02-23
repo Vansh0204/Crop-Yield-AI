@@ -328,17 +328,47 @@ elif nav == "📈 Model Evaluation":
                 <h3>🔍 Key Discovery</h3>
                 <p>Based on our ensemble analysis, the factors on the left represent the 
                 most significant "drivers" of agricultural output for your data.</p>
-                <div style="background: #f1f5f9; padding: 15px; border-radius: 10px; border-left: 5px solid #10b981;">
-                    <b>Hot Tip:</b> Focus your resources on the top 3 drivers to see 
+                <div style="background: rgba(16, 185, 129, 0.1); padding: 15px; border-radius: 10px; border-left: 5px solid #10b981;">
+                    <b style="color: #10b981;">Hot Tip:</b> Focus your resources on the top 3 drivers to see 
                     the highest ROI in yield improvement.
                 </div>
             </div>
             """, unsafe_allow_html=True)
             
+            try:
+                with open("model/metrics.json", "r") as f:
+                    metrics = json.load(f)
+                
+                st.markdown(f"""
+                <div class="glass-card" style="margin-top: 20px;">
+                    <h3 style="color: #60a5fa;">📊 Model Metrics</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div>
+                            <p style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 0;">MAE</p>
+                            <p style="font-size: 1.2rem; font-weight: 700;">{metrics['MAE']:,.2f}</p>
+                        </div>
+                        <div>
+                            <p style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 0;">RMSE</p>
+                            <p style="font-size: 1.2rem; font-weight: 700;">{metrics['RMSE']:,.2f}</p>
+                        </div>
+                        <div style="grid-column: span 2;">
+                            <p style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 0;">MSE</p>
+                            <p style="font-size: 1.1rem; font-weight: 700;">{metrics['MSE']:,.2f}</p>
+                        </div>
+                        <div style="grid-column: span 2;">
+                            <p style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 0;">R² Score</p>
+                            <p style="font-size: 1.5rem; font-weight: 800; color: #10b981;">{metrics['R2']:.4f}</p>
+                        </div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+            except:
+                pass
+
             st.markdown("""
             <div class="glass-card" style="margin-top: 20px;">
-                <h4>🏆 Achievement Unlocked</h4>
-                <p>Your current data quality score is <b>94/100</b>.</p>
+                <h4 style="color: #fbbf24; margin-top: 0;">🏆 Achievement Unlocked</h4>
+                <p>Your current data quality score is <b style="color: #fbbf24;">94/100</b>.</p>
             </div>
             """, unsafe_allow_html=True)
 
