@@ -45,13 +45,25 @@ pred = model.predict(X_test)
 
 # Evaluation
 mae = mean_absolute_error(y_test, pred)
-rmse = mean_squared_error(y_test, pred) ** 0.5
+mse = mean_squared_error(y_test, pred)
+rmse = mse ** 0.5
 r2 = r2_score(y_test, pred)
 
 print("\nModel Performance:")
 print("MAE:", mae)
+print("MSE:", mse)
 print("RMSE:", rmse)
 print("R2 Score:", r2)
+
+# Save metrics
+metrics = {
+    "MAE": mae,
+    "MSE": mse,
+    "RMSE": rmse,
+    "R2": r2
+}
+with open("model/metrics.json", "w") as f:
+    json.dump(metrics, f)
 
 # Save model
 joblib.dump(model, "model/crop_model.pkl")
