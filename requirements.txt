@@ -4,4 +4,4 @@ scikit-learn
 streamlit
 matplotlib
 joblib
-altair
+altair<5
