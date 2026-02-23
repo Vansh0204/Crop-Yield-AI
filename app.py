@@ -310,7 +310,6 @@ elif nav == "📈 Model Evaluation":
         with col_ch:
             st.markdown('<div class="glass-card">', unsafe_allow_html=True)
             fig, ax = plt.subplots(figsize=(10, 8), facecolor='#ffffff')
-            colors = plt.cm.summer(plt.normalize(list(top_factors.values())))
             bars = ax.barh(list(top_factors.keys()), list(top_factors.values()), color='#10b981', alpha=0.9)
             
             ax.set_xlabel('Predictive Weight (0-1)', fontsize=12, fontweight='bold', color='#1e293b')
@@ -343,8 +342,10 @@ elif nav == "📈 Model Evaluation":
             </div>
             """, unsafe_allow_html=True)
 
+    except FileNotFoundError:
+        st.error("Factor data missing. Please run the training script first.")
     except Exception as e:
-        st.error("Factor data missing. Please run the engine first.")
+        st.error(f"Error displaying model evaluation: {str(e)}")
 
 elif nav == "📖 Architecture & Explanation":
     st.header("📖 Architecture & System Logic")
