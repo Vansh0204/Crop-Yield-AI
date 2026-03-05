@@ -5,3 +5,5 @@ streamlit>=1.39.0
 matplotlib
 joblib
 altair
+
+groq
