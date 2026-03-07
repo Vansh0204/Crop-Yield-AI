@@ -7,3 +7,4 @@ joblib
 altair
 
 groq
+langgraph>=0.2.0
