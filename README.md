@@ -12,6 +12,9 @@ The first phase of the system focuses on a robust machine learning pipeline for 
 - **Factor Identification**: Identifies and visualizes the most significant factors driving crop yield.
 - **Batch Processing**: Allows users to upload CSV files for bulk predictions.
 
+### 🤖 Farm advisory agent (LangGraph)
+The repository includes a linear LangGraph workflow (`agent.py`) that predicts yield, flags rule-based risks, retrieves crop-specific agronomic context, calls the Groq-backed LLM for narrative advice, and formats a markdown report via `run_advisory()`.
+
 ### 🛠️ Installation
 
 1. **Clone the repository**:
