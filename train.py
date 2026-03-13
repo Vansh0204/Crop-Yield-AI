@@ -12,6 +12,8 @@ os.makedirs("model", exist_ok=True)
 # Load data
 df = pd.read_csv("data/crop_yield.csv")
 
+# Year span in this file is referenced by the agent for extrapolation warnings.
+
 # Drop index column if exists
 if "Unnamed: 0" in df.columns:
     df = df.drop(columns=["Unnamed: 0"])
