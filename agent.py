@@ -1,5 +1,8 @@
 """
 LangGraph agentic workflow for crop yield prediction and farm advisory.
+
+The graph is compiled once at import time; use run_advisory() to execute the linear
+node sequence from prediction through markdown report assembly.
 """
 
 from __future__ import annotations
