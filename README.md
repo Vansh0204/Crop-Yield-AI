@@ -58,6 +58,11 @@ The repository includes a linear LangGraph workflow (`agent.py`) that predicts y
 - `model/`: Stores the trained model (`.pkl`) and analytical data (`.json`).
 - `architecture.md`: Detailed system architecture documentation.
 - `MILESTONE1_REPORT.md`: Formal report on Milestone 1 progress and performance.
+- `llm_client.py`: Groq-backed LLM helper used by the advisory graph.
+- `agent.py`: LangGraph `FarmAdvisoryState` workflow and `run_advisory()` API.
+- `scripts/run_advisory_demo.py`: Optional CLI smoke test for the advisory pipeline.
+
+After installing dependencies, you can run `python scripts/run_advisory_demo.py` to print a sample status and yield.
 
 ---
 *Developed as part of the Intelligent Crop Yield Prediction and Agentic Farm Advisory System project.*
