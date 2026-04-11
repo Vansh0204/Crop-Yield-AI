@@ -1,13 +1,13 @@
 import streamlit as st
-import pandas as pd
-import joblib
+import agent
+from pdf_exporter import export_advisory_pdf
 
-def get_multi_season_predictions(model, row_template, start_year, end_year):
-    results = []
-    for y in range(start_year, end_year + 1):
-        row_enc = row_template.copy()
-        row_enc['Year'] = y
-        results.append({"Year": y, "Predicted_Yield": float(model.predict(row_enc)[0])})
-    return pd.DataFrame(results)
+st.set_page_config(page_title="AgriLogistics Premium")
+nav = st.sidebar.radio("Navigation", ["Dashboard", "AI Advisor"])
 
-st.title("AgriLogistics Dashboard")
+if nav == "AI Advisor":
+    st.header("🤖 AI Farm Advisor")
+    if st.button("Generate"):
+        res = agent.run_advisory({"crop": "Wheat"})
+        st.write(res["advisory_report"])
+        st.download_button("Download PDF", export_advisory_pdf(res))
