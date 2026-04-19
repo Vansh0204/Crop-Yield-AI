@@ -123,7 +123,43 @@ elif selection == "📈 Model Evaluation":
 
 elif selection == "📖 Architecture & Explanation":
     st.title("📖 Enterprise Architecture")
-    st.write("Industrial Stack: Random Forest + Groq Llama-3.3 + FAISS RAG.")
+    st.markdown("---")
+    
+    t1, t2, t3 = st.tabs(["🧠 ML Pipeline", "🤖 Agentic Workflow", "📂 Enterprise RAG"])
+    
+    with t1:
+        st.subheader("1. Predictive ML Pipeline (Milestone 1)")
+        st.markdown("""
+        The engine utilizes a **Random Forest Regressor Ensemble** trained on 30 years of global agricultural data.
+        
+        **Pipeline Sequence:**
+        - **Preprocessing**: Handling missing climatic data using regional means.
+        - **Encoding**: Transformation of 'Area' and 'Item' using high-density One-Hot encoding.
+        - **Validation**: Validated against unseen test data with an **R² score of 0.987**.
+        """)
+        
+    with t2:
+        st.subheader("2. Agentic State Machine (Milestone 2)")
+        st.markdown("""
+        Built using **LangGraph**, the system manages an explicit state to guide reasoning.
+        
+        **Architecture Flow:**
+        1. **Validation Node**: Checks inputs and corrects geographical inconsistencies.
+        2. **Prediction Node**: Consults the ML model for yield estimates.
+        3. **Risk Analysis Node**: Identifies potential climatic threats.
+        4. **Retrieval Node**: Performs semantic search in our **FAISS Vector Store**.
+        5. **Advisory Node**: Groq Llama-3.3 synthesizes all data into a professional report.
+        """)
+        
+    with t3:
+        st.subheader("3. Knowledge Engine (RAG)")
+        st.markdown("""
+        Our **Retrieval-Augmented Generation** logic ensures expert-level accuracy.
+        
+        - **Vector Store**: FAISS indexing 50+ expert chunks.
+        - **Embeddings**: 'all-MiniLM-L6-v2' transformer for high-precision semantic matching.
+        - **Speed**: Accelerated via Groq LPUs for sub-second inference.
+        """)
 
 elif selection == "🤖 Farm Advisory (AI)":
     st.header("🤖 Enterprise AI Advisor")
