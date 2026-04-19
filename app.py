@@ -54,7 +54,7 @@ if nav == "📈 Yield Dashboard":
     st.subheader("Historical Yield Trends")
     selected_area = st.selectbox("Select Region", df['Area'].unique()[:10])
     area_df = df[df['Area'] == selected_area]
-    fig = px.line(area_df, x="Year", y="Value", color="Item", title=f"Yield in {selected_area}")
+    fig = px.line(area_df, x="Year", y="hg/ha_yield", color="Item", title=f"Yield in {selected_area}")
     st.plotly_chart(fig, use_container_width=True)
 
 elif nav == "🤖 Farm Advisory (AI)":
