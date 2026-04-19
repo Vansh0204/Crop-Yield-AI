@@ -56,7 +56,7 @@ def retrieve_context_node(state: FarmAdvisoryState):
     return {"retrieved_context": rag_store.retrieve_context(state["crop"])}
 
 def generate_advisory_node(state: FarmAdvisoryState):
-    llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
+    llm = ChatGoogleGenerativeAI(model="gemini-pro")
     res = llm.invoke([HumanMessage(content=f"Report for {state['crop']}")])
     return {"advisory_report": res.content, "structured_advisory": {"recommended_actions": ["Optimize irrigation"], "references": ["FAO Soil Guide"]}}
 
