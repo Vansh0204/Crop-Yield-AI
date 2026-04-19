@@ -56,8 +56,8 @@ def retrieve_context_node(state: FarmAdvisoryState):
     return {"retrieved_context": rag_store.retrieve_context(state["crop"])}
 
 def generate_advisory_node(state: FarmAdvisoryState):
-    # Switching to Groq Llama 3 70B
-    llm = ChatGroq(model_name="llama3-70b-8192")
+    # Updating to currently supported Llama 3.3
+    llm = ChatGroq(model_name="llama-3.3-70b-versatile")
     res = llm.invoke([HumanMessage(content=f"Report for {state['crop']}")])
     return {"advisory_report": res.content, "structured_advisory": {"recommended_actions": ["Optimize irrigation"], "references": ["FAO Soil Guide"]}}
 
