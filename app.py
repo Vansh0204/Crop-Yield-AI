@@ -35,7 +35,7 @@ def load_assets():
         model = joblib.load(model_path)
         df = pd.read_csv(data_path)
     except Exception as e:
-        st.error(f"Error loading assets: {str(e)}")
+        st.error(f"Error loading assets: {type(e).__name__} - {str(e)}")
         return None, None, None
 
     try:
