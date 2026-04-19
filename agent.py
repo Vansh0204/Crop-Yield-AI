@@ -56,9 +56,9 @@ def retrieve_context_node(state: FarmAdvisoryState):
     return {"retrieved_context": rag_store.retrieve_context(state["crop"])}
 
 def generate_advisory_node(state: FarmAdvisoryState):
-    # Updating to currently supported Llama 3.3
-    llm = ChatGroq(model_name="llama-3.3-70b-versatile")
-    res = llm.invoke([HumanMessage(content=f"Report for {state['crop']}")])
+    # Explicitly including the mandatory Milestone 2 requirements in the prompt
+    sys_msg = SystemMessage(content="You are a professional Agronomist. Your reports MUST include: 1. Crop Summary, 2. Yield Interpretation, 3. Risk Factors, 4. Recommended Actions, 5. Supporting References, and 6. A clear AGRICULTURAL AND ETHICAL DISCLAIMER.")
+    res = llm.invoke([sys_msg, HumanMessage(content=f"Generate a professional advisory report for {state['crop']} in {state['area']}. Use this expert context: {state['retrieved_context']}")])
     return {"advisory_report": res.content, "structured_advisory": {"recommended_actions": ["Optimize irrigation"], "references": ["FAO Soil Guide"]}}
 
 def run_advisory(inputs):
