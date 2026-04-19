@@ -19,8 +19,13 @@ st.set_page_config(
 # Load data and model
 @st.cache_resource
 def load_assets():
-    model = joblib.load('model/crop_model.pkl')
-    df = pd.read_csv('data/crop_yield.csv')
+    try:
+        model = joblib.load('model/crop_model.pkl')
+        df = pd.read_csv('data/crop_yield.csv')
+    except Exception as e:
+        st.error(f"Error loading assets: {e}")
+        return None, None, None
+
     try:
         with open('known_values.json', 'r') as f:
             known = json.load(f)
@@ -48,12 +53,20 @@ with st.sidebar:
         ]
     )
     
+    # Secret Check for User
+    if not (st.secrets.get("GOOGLE_API_KEY") or st.secrets.get("google_api_key")):
+         st.warning("⚠️ GOOGLE_API_KEY not found in Secrets. AI Advisory will fail.")
+
     st.markdown("---")
     st.subheader("🌿 Live System Status")
     st.write("Model Precision: **98.7%**")
     st.write("Compute Nodes: **Active**")
 
 # --- Application Logic ---
+
+if model is None:
+    st.error("Critical Failure: Could not load data or model. Check file paths.")
+    st.stop()
 
 if selection == "🏠 Overview / Dashboard":
     st.title("🌿 Agricultural Yield Analytics")
@@ -119,6 +132,11 @@ elif selection == "🤖 Farm Advisory (AI)":
     ai_crop = st.selectbox("Crop", known_values["crops"], key="ai_crop")
     if st.button("Generate Farm Advisory Report"):
         with st.spinner("Consulting AI..."):
-            res = agent.run_advisory({"area": ai_area, "crop": ai_crop})
-            st.markdown(res["advisory_report"])
-            st.download_button("📄 Download PDF", export_advisory_pdf(res))
+            try:
+                res = agent.run_advisory({"area": ai_area, "crop": ai_crop})
+                st.markdown(res["advisory_report"])
+                st.download_button("📄 Download PDF", export_advisory_pdf(res))
+            except Exception as e:
+                st.error("### ❌ AI Generation Failed")
+                st.error(f"Technical Error: {e}")
+                st.info("💡 Hint: Usually this is due to an invalid GOOGLE_API_KEY in your Streamlit Secrets.")
