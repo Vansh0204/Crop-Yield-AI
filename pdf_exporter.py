@@ -14,4 +14,4 @@ def export_advisory_pdf(state: dict) -> bytes:
     pdf.add_page()
     pdf.set_font("Helvetica", "B", 14)
     pdf.cell(0, 10, f"Crop: {state.get('crop', 'Unknown')}", ln=True)
-    return pdf.output()
+    return bytes(pdf.output())

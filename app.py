@@ -149,6 +149,6 @@ elif selection == "🤖 Farm Advisory (AI)":
             try:
                 res = agent.run_advisory({"area": ai_area, "crop": ai_crop})
                 st.markdown(res["advisory_report"])
-                st.download_button("📄 Download PDF Advisory", export_advisory_pdf(res), use_container_width=True)
+                st.download_button("📄 Download PDF Advisory", export_advisory_pdf(res), file_name="AgriAI_Advisory_Report.pdf", use_container_width=True)
             except Exception as e:
                 st.error(f"AI Generation Failed: {e}")
