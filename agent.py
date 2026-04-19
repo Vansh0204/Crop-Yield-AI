@@ -9,7 +9,13 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from dotenv import load_dotenv
 import rag_store
 
+import streamlit as st
 load_dotenv()
+
+# Prioritize Streamlit Secrets for Cloud Deployment
+api_key = st.secrets.get("GOOGLE_API_KEY") or os.getenv("GOOGLE_API_KEY")
+if api_key:
+    os.environ["GOOGLE_API_KEY"] = api_key
 
 class FarmAdvisoryState(TypedDict):
     crop: str
