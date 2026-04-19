@@ -8,6 +8,6 @@ matplotlib
 joblib
 streamlit
 plotly
-langchain-google-genai
+langchain-google-genai>=2.0.0
 langgraph
 python-dotenv
