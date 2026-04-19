@@ -9,5 +9,6 @@ joblib
 streamlit
 plotly
 langchain-google-genai>=2.0.0
+langchain-groq
 langgraph
 python-dotenv

@@ -4,18 +4,18 @@ import os
 import difflib
 from typing import TypedDict, Annotated, List
 from langgraph.graph import StateGraph, END
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage, SystemMessage
 from dotenv import load_dotenv
 import rag_store
-
 import streamlit as st
+
 load_dotenv()
 
 # Prioritize Streamlit Secrets for Cloud Deployment
-api_key = st.secrets.get("GOOGLE_API_KEY") or os.getenv("GOOGLE_API_KEY")
-if api_key:
-    os.environ["GOOGLE_API_KEY"] = api_key
+groq_key = st.secrets.get("GROQ_API_KEY") or os.getenv("GROQ_API_KEY")
+if groq_key:
+    os.environ["GROQ_API_KEY"] = groq_key
 
 class FarmAdvisoryState(TypedDict):
     crop: str
@@ -56,7 +56,8 @@ def retrieve_context_node(state: FarmAdvisoryState):
     return {"retrieved_context": rag_store.retrieve_context(state["crop"])}
 
 def generate_advisory_node(state: FarmAdvisoryState):
-    llm = ChatGoogleGenerativeAI(model="gemini-1.0-pro")
+    # Switching to Groq Llama 3 70B
+    llm = ChatGroq(model_name="llama3-70b-8192")
     res = llm.invoke([HumanMessage(content=f"Report for {state['crop']}")])
     return {"advisory_report": res.content, "structured_advisory": {"recommended_actions": ["Optimize irrigation"], "references": ["FAO Soil Guide"]}}
 
