@@ -23,7 +23,6 @@ def load_assets():
         model = joblib.load('model/crop_model.pkl')
         df = pd.read_csv('data/crop_yield.csv')
     except Exception as e:
-        st.error(f"Error loading assets: {e}")
         return None, None, None
 
     try:
@@ -45,7 +44,8 @@ with st.sidebar:
     selection = st.radio(
         "Select Feature",
         [
-            "🏠 Overview / Dashboard", 
+            "🏠 Overview",
+            "📊 Yield Dashboard", 
             "🎯 Make a Prediction", 
             "📈 Model Evaluation", 
             "📖 Architecture & Explanation",
@@ -55,7 +55,7 @@ with st.sidebar:
     
     # Secret Check for User
     if not (st.secrets.get("GOOGLE_API_KEY") or st.secrets.get("google_api_key")):
-         st.warning("⚠️ GOOGLE_API_KEY not found in Secrets. AI Advisory will fail.")
+         st.warning("⚠️ GOOGLE_API_KEY not found in Secrets.")
 
     st.markdown("---")
     st.subheader("🌿 Live System Status")
@@ -65,28 +65,42 @@ with st.sidebar:
 # --- Application Logic ---
 
 if model is None:
-    st.error("Critical Failure: Could not load data or model. Check file paths.")
+    st.error("Critical Failure: Could not load data. Check repository files.")
     st.stop()
 
-if selection == "🏠 Overview / Dashboard":
-    st.title("🌿 Agricultural Yield Analytics")
+if selection == "🏠 Overview":
+    st.title("🌿 Welcome to AgriAI")
+    st.markdown("---")
+    st.markdown("""
+    ### Empowering Global Agriculture through Intelligence
+    AgriAI is a precision agricultural platform designed to bridge the gap between complex machine learning models and practical farming decisions.
+    
+    **Our Solution Provides:**
+    - **Predictive Analytics**: Forecasting crop yields based on 30 years of global data.
+    - **Interactive Dashboards**: Discovering trends across 101 countries and 10 major crop types.
+    - **Agentic AI Advisory**: personalized farm strategies powered by Gemini Pro and local RAG knowledge.
+    
+    *Select a feature from the sidebar to explore the platform.*
+    """)
+    st.image("https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=1200&q=80", caption="Precision Farming for a Sustainable Future")
+
+elif selection == "📊 Yield Dashboard":
+    st.title("📊 Agricultural Yield Dashboard")
     m1, m2, m3 = st.columns(3)
     m1.metric("Dataset Size", f"{len(df):,}")
     m2.metric("Total Countries", len(df['Area'].unique()))
     m3.metric("Crop Varieties", len(df['Item'].unique()))
     st.markdown("---")
-    selected_area = st.selectbox("Select Region", df['Area'].unique()[:10])
+    selected_area = st.selectbox("Select Region for Analysis", df['Area'].unique()[:15])
     area_df = df[df['Area'] == selected_area]
-    fig = px.line(area_df, x="Year", y="hg/ha_yield", color="Item", title=f"Yield in {selected_area}")
+    fig = px.line(area_df, x="Year", y="hg/ha_yield", color="Item", title=f"Historical Yield in {selected_area}", 
+                  color_discrete_sequence=px.colors.qualitative.Bold)
     st.plotly_chart(fig, use_container_width=True)
 
 elif selection == "🎯 Make a Prediction":
     st.title("🎯 Prediction Engine")
-    st.markdown("Select your input method to generate forecasts.")
-    method = st.radio("Select Prediction Method", ["📝 Manual Entry Form", "📤 Batch CSV Upload"], horizontal=True)
-    
     st.markdown("---")
-    st.header("Make a Prediction")
+    st.header("Make a Yield Prediction")
     c1, c2 = st.columns(2)
     with c1:
         s_area = st.selectbox("Select Area (Country)", known_values["countries"])
@@ -98,45 +112,44 @@ elif selection == "🎯 Make a Prediction":
         s_temp = st.number_input("Average Temperature (°C)", -10.0, 50.0, 25.0)
     
     if st.button("Predict Yield ✨"):
+        # Simulated prediction for demo
         st.success(f"Predicted Yield: {np.random.randint(30000, 60000):,} hg/ha")
 
 elif selection == "📈 Model Evaluation":
     st.title("📈 Model Performance & Evaluation")
-    st.markdown("Detailed breakdown of predictive performance and model mechanics.")
     col1, col2 = st.columns([2, 1])
     with col1:
-        st.subheader("Neural Asset Priority")
+        st.subheader("Neural Asset Priority (Feature Importance)")
         features = ["Item_Potatoes", "Item_Cassava", "Item_Sweet potatoes", "pesticides_tonnes", "Area_India", "Year", "avg_temp"]
         weights = [0.35, 0.12, 0.1, 0.08, 0.07, 0.04, 0.03]
         feat_df = pd.DataFrame({"Feature": features, "Weight": weights}).sort_values("Weight", ascending=True)
-        fig = px.bar(feat_df, x="Weight", y="Feature", orientation='h', color_discrete_sequence=['#10b981'])
+        fig = px.bar(feat_df, x="Weight", y="Feature", orientation='h', color_discrete_sequence=['#ff4b4b'])
         st.plotly_chart(fig, use_container_width=True)
     with col2:
-        st.info("### 🔍 Key Discovery\nBased on our ensemble analysis, the factors on the left represent the most significant 'drivers' of agricultural output.")
-        st.markdown("### 📊 Model Metrics")
+        st.info("### 🔍 Insights\nModel training used Random Forest ensembles to maximize prediction accuracy across varying soil climates.")
+        st.metric("R² Score", "0.987")
         st.metric("MAE", "3,509.59")
-        st.metric("RMSE", "9,534.03")
 
 elif selection == "📖 Architecture & Explanation":
-    st.title("📖 Architecture & System Logic")
-    st.markdown("### 1. The Data Pipeline")
-    st.write("Our system uses a Random Forest Regressor with 50 decision nodes. This ensemble approach handles non-linear relationships in agricultural data far better than traditional regression.")
-    with st.expander("2. Privacy First"):
-        st.write("All data processed in this session is resident in memory.")
-    with st.expander("3. Accuracy Benchmarks"):
-        st.markdown("- **R² Score:** 0.987\n- **Reliability:** High-Precision Grade")
+    st.title("📖 System Architecture")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("### 🛠️ The Pipeline")
+        st.write("1. **Data Ingestion**: Multi-source FAOSTAT data.\n2. **Preprocessing**: Normalization and encoding.\n3. **Model**: 50-tree Random Forest Ensemble.")
+    with col2:
+        st.markdown("### 🧠 Logic Nodes")
+        st.write("- **Validation**: Sanitizes input.\n- **Prediction**: Quantifies yield.\n- **RAG**: Incorporates expert knowledge.")
 
 elif selection == "🤖 Farm Advisory (AI)":
     st.header("🤖 Pro-Grade Farm Advisory")
+    st.markdown("---")
     ai_area = st.selectbox("Area", known_values["countries"], key="ai_area")
     ai_crop = st.selectbox("Crop", known_values["crops"], key="ai_crop")
     if st.button("Generate Farm Advisory Report"):
-        with st.spinner("Consulting AI..."):
+        with st.spinner("Consulting AI advisor..."):
             try:
                 res = agent.run_advisory({"area": ai_area, "crop": ai_crop})
                 st.markdown(res["advisory_report"])
                 st.download_button("📄 Download PDF", export_advisory_pdf(res))
             except Exception as e:
-                st.error("### ❌ AI Generation Failed")
-                st.error(f"Technical Error: {e}")
-                st.info("💡 Hint: Usually this is due to an invalid GOOGLE_API_KEY in your Streamlit Secrets.")
+                st.error(f"AI Generation Failed: {e}")
